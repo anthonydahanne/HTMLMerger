@@ -1,5 +1,5 @@
 {
-  "name": "linksrewriter",
+  "name": "htmlmerger",
   "version": "0.0.1",
   "description": "a small utility to rewrite some html",
   "main": "index.js",
