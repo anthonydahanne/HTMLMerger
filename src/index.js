@@ -1,24 +1,38 @@
 var cheerio = require('cheerio');
 var fs = require("fs"); //Load the filesystem module
-const inputDir = "../test/";
-const outputDir = "../results/";
+const inputDir = "test/example/";
+const resultFileLocation = "results/result.html";
+const tocFileName = "toc.html";
 
-fs.readdir(inputDir, function (err, files) {
-  console.log("Files found : " + files);
-  for (var i = 0; i < files.length; i++) {
-    (function (i) {
-      console.log(files[i]);
-      fs.readFile(inputDir + files[i], 'utf8', function (err, data) {
-        $ = cheerio.load(data);
-        console.log(files[i]);
-        fs.writeFile(outputDir + files[i], $("body").html(), 'utf8', function (err, data) {
-          if (err) {
-            console.log(err)
-          } else {
-            console.log("Successfully converted " + files[i])
-          }
-        })
-      })
-    })(i);
-  }
-});
+doItAll(inputDir, resultFileLocation, tocFileName);
+
+function doItAll(inputDir, resultFileLocation, tocFileName ) {
+  var buffer = "";
+  fs.readFile(inputDir + tocFileName, 'utf8', function (err, data) {
+    if (err) console.log(err)
+    $ = cheerio.load(data);
+    $("a").each(function (index, link) {
+      var link = link.attribs.href;
+      console.log("Processing : " + link);
+      var data = fs.readFileSync(inputDir + link, 'utf8');
+
+      $ = cheerio.load(data);
+      $("pre").removeClass();
+      $("pre").addClass("prettyprint");
+      $("pre").addClass("highlight");
+      var preContent = $("pre").html();
+      $("pre").html("<code class=\"language-java\" data-lang=\"java\">" + preContent + "</code>");
+
+      buffer = buffer + $("body").html();
+    })
+    fs.writeFile(resultFileLocation, buffer, 'utf8', function (err, data) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("all done !");
+      }
+    })
+  });
+}
+
