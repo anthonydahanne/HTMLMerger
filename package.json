@@ -1,0 +1,15 @@
+{
+  "name": "linksrewriter",
+  "version": "0.0.1",
+  "description": "a small utility to rewrite some html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anthony Dahanne",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "fs": "0.0.2"
+  }
+}
